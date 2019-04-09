@@ -46,12 +46,12 @@ public class AuthServiceImpl implements AuthService {
 
         log.debug(requestDto.getCode());
 
-//        WechatAuthResp resp = wechatService.code2Session(code);
+        WechatAuthResp resp = wechatService.code2Session(requestDto.getCode());
 
-        WechatAuthResp resp =  WechatAuthResp.builder()
-                .openId("hsdjfhsfhiw")
-                .sessionKey("reiunjsdbnsffw")
-                .build();
+//        WechatAuthResp resp =  WechatAuthResp.builder()
+//                .openId("hsdjfhsfhiw")
+//                .sessionKey("reiunjsdbnw")
+//                .build();
 
         log.debug(resp.toString());
 
@@ -66,12 +66,8 @@ public class AuthServiceImpl implements AuthService {
                 .sessionKey(resp.getSessionKey())
                 .build();
 
-        if (Objects.isNull(requestDto.getUid())){
-            authMapper.saveUser(userAuth);
-        }else {
-            authMapper.updateSessionKey(resp.getOpenId(),resp.getSessionKey());
-            userAuth.setId(requestDto.getUid());
-        }
+        authMapper.saveUser(userAuth);
+
 
         Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
@@ -80,7 +76,7 @@ public class AuthServiceImpl implements AuthService {
         String token = Jwts.builder()
                 .signWith(key)
                 .setSubject(String.valueOf(userAuth.getId()))
-                .setExpiration(new Date(System.currentTimeMillis()+3*24*3600*1000))
+                .setExpiration(new Date(System.currentTimeMillis() + 3 * 24 * 3600 * 1000))
                 .compact();
 
         redisTemplate.set(token,

@@ -18,7 +18,7 @@
         </foreach>
     </insert>
 
-    <select id="getHabitByOpenId" parameterType="string" resultType="Habit">
+    <select id="getHabitsByOpenId" parameterType="string" resultType="Habit">
         SELECT id, title
         FROM habit
         WHERE openId = #{openId}
@@ -38,6 +38,7 @@
         SELECT count
         FROM habit_daily
         WHERE habit_id = #{habitId}
+        LIMIT 1;
     </select>
 
     <select id="getTagIdsByName" parameterType="java.util.List" resultType="long">
@@ -50,7 +51,7 @@
         </foreach>
     </select>
 
-    <select id="getTagNameById" parameterType="long" resultType="string">
+    <select id="getTagNamesById" parameterType="long" resultType="string">
         SELECT tag.name
         FROM tag
         WHERE tag.id IN (SELECT habit_tag.tag_id FROM habit_tag WHERE habit_tag.habit_id = #{habitId})

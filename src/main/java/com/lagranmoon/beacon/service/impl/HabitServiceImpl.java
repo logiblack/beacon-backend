@@ -7,6 +7,7 @@ import com.lagranmoon.beacon.model.HabitDto;
 import com.lagranmoon.beacon.model.HabitRequest;
 import com.lagranmoon.beacon.model.domain.Habit;
 import com.lagranmoon.beacon.service.HabitService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 /**
  * @author Lagranmoon
  */
+@Slf4j
 @Service
 public class HabitServiceImpl implements HabitService {
 
@@ -27,7 +29,10 @@ public class HabitServiceImpl implements HabitService {
     @Override
     public List<HabitDto> getHabitListByOpenId(String openId) {
 
-        List<Habit> habitList = habitMapper.getHabitByOpenId(openId);
+        List<Habit> habitList = habitMapper.getHabitsByOpenId(openId);
+
+        log.info(String.valueOf(habitList.size()));
+
         return habitList.stream()
                 .map(habit -> {
                     HabitDto habitDto = HabitDto.builder()
@@ -36,7 +41,14 @@ public class HabitServiceImpl implements HabitService {
                             .build();
                     List<String> tagList = habitMapper.getHabitTagsById(habit.getId());
                     habitDto.setTagList(tagList);
-                    habitDto.setCount(habitMapper.getCountById(habit.getId()));
+
+                    Integer count = habitMapper.getCountById(habit.getId());
+                    if (Objects.isNull(count)){
+                        habitDto.setCount(0);
+                    }else {
+                        habitDto.setCount(count);
+                    }
+
                     return habitDto;
                 }).collect(Collectors.toList());
     }

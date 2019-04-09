@@ -6,8 +6,14 @@
     <insert id="saveUser" parameterType="UserAuth" useGeneratedKeys="true"
             keyProperty="id">
 
+        <selectKey resultType="long" order="AFTER" keyProperty="id">
+            SELECT id FROM user_auth WHERE open_id = #{openId}
+        </selectKey>
+
         INSERT INTO user_auth(open_id, user_name, session_key)
         VALUES (#{openId}, #{userName}, #{sessionKey})
+        ON DUPLICATE KEY UPDATE session_key = #{sessionKey}
+
     </insert>
 
 

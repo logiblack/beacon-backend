@@ -22,7 +22,7 @@ public class HabitController {
     private HabitService habitService;
 
     @GetMapping("/habit")
-    public ResponseEntity getHabitList(@SessionAttribute("openId") String openId) {
+    public ResponseEntity getHabitList(@RequestAttribute("openId") String openId) {
 
         List<HabitDto> habitList = habitService.getHabitListByOpenId(openId);
 

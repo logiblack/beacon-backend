@@ -18,7 +18,7 @@ public interface HabitMapper {
      * @param openId 用户的OpenID
      * @return 返回的Habit中包含id和title
      */
-    List<Habit> getHabitByOpenId(String openId);
+    List<Habit> getHabitsByOpenId(String openId);
 
     Habit getHabitById(Long id);
 
@@ -43,7 +43,7 @@ public interface HabitMapper {
 
     List<Long> getTagIdsByName(List<String> tagList);
 
-    List<String> getTagNameById(Long habitId);
+    List<String> getTagNamesById(Long habitId);
 
 
 
