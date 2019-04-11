@@ -13,6 +13,8 @@ import java.util.List;
 public interface HabitMapper {
 
 
+    void insertHabit(Habit habit);
+
     /**
      * 根据用户的OpenID返回Habit
      * @param openId 用户的OpenID
@@ -20,31 +22,9 @@ public interface HabitMapper {
      */
     List<Habit> getHabitsByOpenId(String openId);
 
-    Habit getHabitById(Long id);
+    Habit getHabitById(@Param("id") Long id,@Param("openId") String openId);
 
-    /**
-     * 根据Habit ID获取其所有的Tag
-     * @param habitId Habit Id
-     * @return Tag名称列表
-     */
-    List<String> getHabitTagsById(Long habitId);
-
-    /**
-     * 根据Habit ID获取当前Habit完成次数
-     * @param habitId Habit ID
-     * @return Habit完成次数
-     */
-    Integer getCountById(Long habitId);
-
-    void insertHabit(Habit habit);
-
-    void insertHabitTags(@Param("id") Long habitId
-            ,@Param("tagList") List<Long> tagList);
-
-    List<Long> getTagIdsByName(List<String> tagList);
-
-    List<String> getTagNamesById(Long habitId);
-
+    void deleteHabitById(@Param("id") Long id,@Param("openId") String openId);
 
 
 }

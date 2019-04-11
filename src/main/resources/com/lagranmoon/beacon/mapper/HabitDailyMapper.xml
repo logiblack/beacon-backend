@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lagranmoon.beacon.mapper.HabitDailyMapper">
+
+    <insert id="increaseCount" parameterType="long">
+        INSERT INTO habit_daily(habit_id, date, count)
+        SELECT habit.id, CURRENT_DATE, 1
+        FROM habit
+        WHERE habit.id = #{habitId}
+        ON DUPLICATE KEY UPDATE count=count + 1;
+    </insert>
+
+    <select id="getOpenIdByHabitId" parameterType="long" resultType="string">
+
+
+        SELECT open_id
+        FROM habit
+        WHERE id = #{id}
+        LIMIT 1
+    </select>
+
+    <select id="getCountById" parameterType="long" resultType="integer">
+        SELECT count
+        FROM habit_daily
+        WHERE habit_id = #{habitId}
+          AND date = CURRENT_DATE
+        LIMIT 1;
+    </select>
+
+    <select id="getCountByIdAndDate" resultType="integer">
+        SELECT count
+        FROM habit_daily
+        WHERE habit_id = #{habitId}
+          AND date = DATE(#{date})
+    </select>
+
+    <delete id="deleteHabitDailyByHabitId" parameterType="long">
+        DELETE
+        FROM habit_daily
+        WHERE habit_id = #{habitId}
+    </delete>
+
+
+</mapper>

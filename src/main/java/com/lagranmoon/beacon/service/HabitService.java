@@ -13,8 +13,10 @@ public interface HabitService {
 
     List<HabitDto> getHabitListByOpenId(String openId);
 
-    HabitDetailDto getHabitDetailById(Long id);
+    HabitDetailDto getHabitDetailById(Long id,String openId);
 
     void saveHabit(HabitRequest habitRequest,String openId);
+
+    void deleteHabit(Long id,String openId);
 
 }

@@ -46,12 +46,12 @@ public class AuthServiceImpl implements AuthService {
 
         log.debug(requestDto.getCode());
 
-        WechatAuthResp resp = wechatService.code2Session(requestDto.getCode());
+//        WechatAuthResp resp = wechatService.code2Session(requestDto.getCode());
 
-//        WechatAuthResp resp =  WechatAuthResp.builder()
-//                .openId("hsdjfhsfhiw")
-//                .sessionKey("reiunjsdbnw")
-//                .build();
+        WechatAuthResp resp =  WechatAuthResp.builder()
+                .openId("hsdjfhsfhiw")
+                .sessionKey("reiunjsdbnw")
+                .build();
 
         log.debug(resp.toString());
 

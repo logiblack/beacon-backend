@@ -34,9 +34,10 @@ public class HabitController {
     }
 
     @GetMapping("/habit/{id}")
-    public ResponseEntity getHabitDetail(@PathVariable Long id) {
+    public ResponseEntity getHabitDetail(@PathVariable Long id,
+                                         @RequestAttribute("openId") String openId) {
 
-        HabitDetailDto habitDetail = habitService.getHabitDetailById(id);
+        HabitDetailDto habitDetail = habitService.getHabitDetailById(id, openId);
 
         return ResponseEntity.ok(
                 ResponseDto.builder()
@@ -45,10 +46,18 @@ public class HabitController {
         );
     }
 
+    @DeleteMapping("/habit/{id}")
+    public ResponseEntity deleteHabitById(@PathVariable Long id
+            , @RequestAttribute("openId") String openId) {
+        habitService.deleteHabit(id, openId);
+        return ResponseEntity.ok()
+                .body(ResponseDto.builder().msg("success").build());
+    }
+
     @PostMapping("/habit")
     public ResponseEntity saveHabit(@RequestBody @Valid HabitRequest habitRequest
-            ,@RequestAttribute("openId") String openId) {
-        habitService.saveHabit(habitRequest,openId);
+            , @RequestAttribute("openId") String openId) {
+        habitService.saveHabit(habitRequest, openId);
         return ResponseEntity.ok(
                 ResponseDto.builder()
                         .msg("success")

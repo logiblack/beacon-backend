@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Lagranmoon
@@ -11,6 +12,11 @@ import java.util.Date;
 @Data
 @Builder
 public class HabitDetailDto {
+
+    private Long id;
+    private String title;
+    private Integer count;
+    private List<String> tagList;
 
     private String content;
     private Integer frequency;

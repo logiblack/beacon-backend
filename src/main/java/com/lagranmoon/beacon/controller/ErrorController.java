@@ -1,5 +1,7 @@
 package com.lagranmoon.beacon.controller;
 
+import com.lagranmoon.beacon.exception.ResourceNotFoundException;
+import com.lagranmoon.beacon.exception.UnAuthenticationException;
 import com.lagranmoon.beacon.exception.UnAuthorizedException;
 import com.lagranmoon.beacon.model.ResponseDto;
 import lombok.extern.slf4j.Slf4j;
@@ -27,13 +29,12 @@ import java.util.Objects;
 @Slf4j
 @RestController
 @ControllerAdvice
-public class ErrorController  {
+public class ErrorController {
 
 
     @ExceptionHandler(UnAuthorizedException.class)
-    public ResponseEntity<ResponseDto> handle401(UnAuthorizedException e) {
+    public ResponseEntity handle401(UnAuthorizedException e) {
 
-        log.debug("errorCode:{}", e.getErrorCode());
 
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
@@ -46,8 +47,26 @@ public class ErrorController  {
                 );
     }
 
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity handle404(ResourceNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ResponseDto.builder()
+                        .msg(e.getLocalizedMessage())
+                        .errCode(e.getErrCode())
+                        .build());
+    }
+
+    @ExceptionHandler(UnAuthenticationException.class)
+    public ResponseEntity handle403(UnAuthenticationException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(ResponseDto.builder()
+                        .errCode(e.getErrCode())
+                        .msg(e.getLocalizedMessage())
+                        .build());
+    }
+
     @ExceptionHandler(MethodNotAllowedException.class)
-    public ResponseEntity<ResponseDto> handle405(MethodNotAllowedException e) {
+    public ResponseEntity handle405(MethodNotAllowedException e) {
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
                 .body(
                         ResponseDto.builder()
@@ -57,7 +76,7 @@ public class ErrorController  {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ResponseDto> handleArgumentNotValid(MethodArgumentNotValidException e) {
+    public ResponseEntity handleArgumentNotValid(MethodArgumentNotValidException e) {
 
         FieldError error = e.getBindingResult().getFieldError();
         String errMsg = "";
@@ -79,19 +98,19 @@ public class ErrorController  {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ResponseDto> handleError(Exception e){
+    public ResponseEntity handleError(Exception e) {
 
-        log.error("Server Internal Error",e);
+        log.error("Server Internal Error", e);
 
-        if (e instanceof UnAuthorizedException){
+        if (e instanceof UnAuthorizedException) {
             return handle401((UnAuthorizedException) e);
         }
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(
                         ResponseDto.builder()
-                        .msg(e.getLocalizedMessage())
-                        .build()
+                                .msg(e.getLocalizedMessage())
+                                .build()
                 );
     }
 
