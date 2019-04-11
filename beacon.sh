@@ -11,7 +11,7 @@ genWxConfig(){
         mkdir src/main/resources/config
     fi
 
-    if [[ ! -f src/main/resources/config/wechat.properties.txt  ]];then
+    if [[ ! -f src/main/resources/config/wechat.properties  ]];then
         touch src/main/resources/config/wechat.properties;
         cat > src/main/resources/config/wechat.properties <<EOF
 app_id=${app_id}
