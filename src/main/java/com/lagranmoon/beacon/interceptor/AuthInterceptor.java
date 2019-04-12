@@ -58,6 +58,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
                     .errCode(e.getErrorCode())
                     .msg(e.getLocalizedMessage())
                     .build();
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.getWriter().write(objectMapper.writeValueAsString(responseDto));
             return false;
         }
