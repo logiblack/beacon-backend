@@ -4,6 +4,7 @@ import com.lagranmoon.beacon.model.HabitDetailDto;
 import com.lagranmoon.beacon.model.HabitDto;
 import com.lagranmoon.beacon.model.HabitRequest;
 import com.lagranmoon.beacon.model.ResponseDto;
+import com.lagranmoon.beacon.model.domain.Habit;
 import com.lagranmoon.beacon.service.HabitService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -65,4 +66,11 @@ public class HabitController {
         );
     }
 
+    @PutMapping("/habit/{id}")
+    public ResponseEntity modifyHabit(@PathVariable Long id,
+                                      @Valid @RequestBody Habit habit,
+                                      @RequestAttribute("openId") String openId){
+
+        return ResponseEntity.ok(null);
+    }
 }
